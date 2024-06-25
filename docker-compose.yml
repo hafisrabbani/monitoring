@@ -54,12 +54,12 @@ services:
     ports:
       - "9100:9100"
     volumes:
-      - "/proc:/host/proc"
-      - "/sys:/host/sys"
-      - "/:/rootfs"
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+      - "/:/rootfs:ro"
+      - "/etc/hostname:/etc/host_hostname:ro"
+      - "/etc/os-release:/etc/host_os-release:ro"
     privileged: true
-    devices:
-      - "/dev/kmsg"
 
   mysql-exporter:
     container_name: mysql-exporter
