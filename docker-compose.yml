@@ -25,7 +25,7 @@ services:
     volumes:
       - "grafana-data:/var/lib/grafana"
       - "./volumes/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
-      - "./volumes/dashboard.json:/var/lib/grafana/dashboards/dashboard.json"
+      - "./volumes/dashboard/:/var/lib/grafana/dashboards/"
       - "./volumes/default.yaml:/etc/grafana/provisioning/dashboards/default.yaml"
     privileged: true
     depends_on:
@@ -46,6 +46,30 @@ services:
     privileged: true
     devices:
       - "/dev/kmsg"
+
+  node-exporter:
+    container_name: node-exporter
+    image: prom/node-exporter:latest
+    network_mode: "host"
+    ports:
+      - "9100:9100"
+    volumes:
+      - "/proc:/host/proc"
+      - "/sys:/host/sys"
+      - "/:/rootfs"
+    privileged: true
+    devices:
+      - "/dev/kmsg"
+
+  mysql-exporter:
+    container_name: mysql-exporter
+    image: prom/mysqld-exporter:latest
+    network_mode: "host"
+    ports:
+      - "9104:9104"
+    environment:
+      - DATA_SOURCE_NAME=${MYSQL_EXPORTER_USER}:${MYSQL_EXPORTER_PASSWORD}@tcp(${MYSQL_EXPORTER_HOST}:${MYSQL_EXPORTER_PORT})/
+    privileged: true
 
 volumes:
   db_data:
