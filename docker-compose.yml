@@ -35,8 +35,6 @@ services:
     container_name: cadvisor
     image: gcr.io/cadvisor/cadvisor:latest
     network_mode: "host"
-    ports:
-      - "8080:8080"
     volumes:
       - "/:/rootfs"
       - "/var/run:/var/run"
@@ -51,8 +49,6 @@ services:
     container_name: node-exporter
     image: prom/node-exporter:latest
     network_mode: "host"
-    ports:
-      - "9100:9100"
     volumes:
       - "/proc:/host/proc"
       - "/sys:/host/sys"
@@ -65,12 +61,9 @@ services:
     container_name: mysql-exporter
     image: prom/mysqld-exporter:latest
     network_mode: "host"
-    ports:
-      - "9104:9104"
     environment:
       - DATA_SOURCE_NAME=${MYSQL_EXPORTER_USER}:${MYSQL_EXPORTER_PASSWORD}@tcp(${MYSQL_EXPORTER_HOST}:${MYSQL_EXPORTER_PORT})/
     privileged: true
 
 volumes:
-  db_data:
   grafana-data:
